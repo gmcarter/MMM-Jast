@@ -1,3 +1,30 @@
+/* -------------------------------------
+   Variables & Base Styles
+-------------------------------------- */
+:root {
+  --ticker-size: 1.4rem;
+  --line-multiplier: 1.44;
+  --color-high: #0a0; /* dark green for better contrast */
+  --color-low: #c00;  /* dark red for better contrast */
+  --color-muted: #999;
+}
+
+.jast-wrapper {
+  overflow: hidden;
+  font-size: var(--ticker-size);
+  line-height: calc(var(--ticker-size) * var(--line-multiplier));
+  position: relative;
+}
+
+.jast-wrapper ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* -------------------------------------
+   Horizontal Ticker
+-------------------------------------- */
 @keyframes tickerh {
   0% {
     transform: translateX(0);
@@ -6,33 +33,18 @@
     transform: translateX(-100%);
   }
 }
-.jast-wrapper {
-  overflow: hidden;
-  --size: 1.4rem;
-  font-size: var(--size);
-  line-height: calc(var(--size) * 1.44);
-}
+
 .jast-wrapper.horizontal {
   margin: 0 auto;
   white-space: nowrap;
 }
-.jast-wrapper ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-}
-.jast-wrapper.vertical {
-  height: calc(var(--size) * 1.44);
-}
-.jast-wrapper.vertical > ul {
-  animation-name: tickerv;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
+
 .jast-wrapper.horizontal .jast-hticker {
   position: absolute;
   display: flex;
+  animation: tickerh 20s linear infinite;
 }
+
 .jast-wrapper.horizontal ul.jast-tickerframe {
   padding-left: 100%;
 }
@@ -41,35 +53,61 @@
   display: inline-block;
 }
 
-.jast-wrapper.horizontal li.jast-stock:before {
-  content: '\2022';
-  margin-right: 0.4em;
-  margin-left: 0.4em;
+.jast-wrapper.horizontal li.jast-stock::before {
+  content: '•';
+  margin: 0 0.4em;
 }
 
-.jast-wrapper:not(.monochrome) .jast-stock span.high {
-  color: green;
+/* -------------------------------------
+   Vertical Ticker
+-------------------------------------- */
+@keyframes tickerv {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
 }
+
+.jast-wrapper.vertical {
+  height: calc(var(--ticker-size) * var(--line-multiplier));
+}
+
+.jast-wrapper.vertical > ul {
+  animation: tickerv 10s linear infinite;
+}
+
+/* -------------------------------------
+   Color States
+-------------------------------------- */
+.jast-wrapper:not(.monochrome) .jast-stock span.high {
+  color: var(--color-high);
+}
+
 .jast-wrapper:not(.monochrome) .jast-stock span.low {
-  color: red;
+  color: var(--color-low);
 }
 
 .jast-multi-currency::before {
-  color: #999;
+  color: var(--color-muted);
   content: '| ';
 }
 
 .jast-wrapper .jast-stock span.jast-change {
   vertical-align: top;
-  font-size: calc(var(--size) - 0.3em);
+  font-size: calc(var(--ticker-size) - 0.3em);
   white-space: nowrap;
 }
 
 .jast-wrapper span.jast-change-value:nth-child(2)::before,
-span.jast-change-value:nth-child(3)::before {
+.jast-wrapper span.jast-change-value:nth-child(3)::before {
   content: ' | ';
 }
 
+/* -------------------------------------
+   "None" Layout (static vertical list)
+-------------------------------------- */
 .MMM-Jast .jast-wrapper.none ul {
   display: flex;
   flex-direction: column;
@@ -97,11 +135,16 @@ span.jast-change-value:nth-child(3)::before {
 .MMM-Jast .jast-wrapper.none .jast-performance {
   display: none;
 }
+
+/* -------------------------------------
+   Table Layout
+-------------------------------------- */
 .MMM-Jast .jast-wrapper.table table {
   table-layout: fixed;
+  width: 100%;
 }
 
 .MMM-Jast .jast-wrapper.table th,
-td {
+.MMM-Jast .jast-wrapper.table td {
   padding-right: 0.5em;
 }
